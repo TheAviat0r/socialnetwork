@@ -1,0 +1,12 @@
+
+*.pyc
+
+settings.py
+
+*.json
+
+*~
+
+collected_static/
+media/
+env/
