@@ -37,7 +37,6 @@ class UserAdmin(UserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': (
-                'date_of_birth',
                 'email',
                 'password1',
                 'password2'

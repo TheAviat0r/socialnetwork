@@ -1,7 +1,6 @@
 # -*- coding: utf-8
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
@@ -10,10 +9,11 @@ from django.db import models
 
 
 # Create your models here.
+from usermedia.models import Photo
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, firstname, lastname, password=None):
+    def create_user(self, email, password=None):
         if not email:
             raise ValueError(u'Email непременно должен быть указан')
 
@@ -25,9 +25,10 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password, firstname, lastname):
-        user = self.create_user(email, password, firstname, lastname)
+    def create_superuser(self, email, password):
+        user = self.create_user(email, password)
         user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
@@ -44,32 +45,36 @@ class ExtUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         db_index=True
     )
-    avatar = models.ImageField(
-        u'Аватар',
-        blank=True,
-        null=True,
-        upload_to=upload_imgs
+
+    avatar = models.ForeignKey(
+        Photo,
+        default=1
     )
+
     firstname = models.CharField(
         u'Имя',
         max_length=40,
         null=True,
         blank=True
     )
+
     lastname = models.CharField(
         u'Фамилия',
         max_length=40,
         null=True,
         blank=True
     )
+
     register_date = models.DateField(
         u'Дата регистрации',
         auto_now_add=True
     )
+
     is_active = models.BooleanField(
         'Активен',
         default=True
     )
+
     is_admin = models.BooleanField(
         'Суперпользователь',
         default=False
@@ -91,7 +96,7 @@ class ExtUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['firstname', 'lastname']
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 
