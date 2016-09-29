@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
@@ -12,7 +13,6 @@ class UserAdmin(UserAdmin):
     add_form = UserCreationForm
 
     list_display = [
-        'date_of_birth',
         'email',
         'firstname',
         'is_admin',
@@ -26,7 +26,6 @@ class UserAdmin(UserAdmin):
                 ('Personal info', {
                  'fields': (
                      'avatar',
-                     'date_of_birth',
                      'firstname',
                      'lastname',
                  )}),

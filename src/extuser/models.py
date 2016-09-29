@@ -13,7 +13,7 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, firstname, lastname, password=None):
         if not email:
             raise ValueError(u'Email непременно должен быть указан')
 
@@ -25,8 +25,8 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
-        user = self.create_user(email, password)
+    def create_superuser(self, email, password, firstname, lastname):
+        user = self.create_user(email, password, firstname, lastname)
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -91,7 +91,7 @@ class ExtUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['email', 'firstname', 'lastname']
+    REQUIRED_FIELDS = ['firstname', 'lastname']
 
     objects = UserManager()
 
