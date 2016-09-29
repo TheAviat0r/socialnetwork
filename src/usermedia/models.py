@@ -8,6 +8,25 @@ from django.db import models
 
 # Create your models here.
 
+class WithComment(models.Model):
+    count_comments = models.PositiveIntegerField(
+        u'Число комментариев',
+        default=0
+    )
+
+    class Meta:
+        abstract = True
+
+
+class WithLike(models.Model):
+    count_likes = models.PositiveIntegerField(
+        u'Число лайков',
+        default=0
+    )
+
+    class Meta:
+        abstract = True
+
 
 class Album(models.Model):
     user = models.ForeignKey(
@@ -38,7 +57,7 @@ def upload_photos(obj, filename):
     return to
 
 
-class Photo(models.Model):
+class Photo(models.Model, WithComment, WithLike):
     album = models.ForeignKey(Album)
 
     preview = models.BooleanField(
@@ -63,6 +82,3 @@ class Photo(models.Model):
         null=True,
         upload_to=upload_photos
     )
-
-    def get_content_type(self):
-        return ContentType.objects.get_for_model(self).id
