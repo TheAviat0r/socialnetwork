@@ -33,11 +33,6 @@ class UserManager(BaseUserManager):
         return user
 
 
-def upload_imgs(obj, filename):
-    to = obj.user.email + "/" + "avatar" + "/" + filename
-    return to
-
-
 class ExtUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         u'Электронная почта',
