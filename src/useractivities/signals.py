@@ -7,13 +7,15 @@ from useractivities.models import Comment, Like
 def comment_up(sender, **kwargs):
     if kwargs["created"]:
         instance = kwargs["instance"]
-        obj = instance.content_type.get_object_for_this_type(id=instance.object_id)
+        obj = instance.content_type.get_object_for_this_type(id=int(instance.object_id))
         obj.count_comments += 1
+        obj.save()
 
 
 @receiver(post_save, sender=Like)
 def like_up(sender, **kwargs):
     if kwargs["created"]:
         instance = kwargs["instance"]
-        obj = instance.content_type.get_object_for_this_type(id=instance.object_id)
+        obj = instance.content_type.get_object_for_this_type(id=int(instance.object_id))
         obj.count_likes += 1
+        obj.save()

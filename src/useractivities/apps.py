@@ -5,3 +5,6 @@ from django.apps import AppConfig
 
 class UseractivitiesConfig(AppConfig):
     name = 'useractivities'
+
+    def ready(self):
+        import signals

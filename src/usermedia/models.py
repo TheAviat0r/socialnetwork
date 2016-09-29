@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 
@@ -60,7 +61,7 @@ class Album(models.Model):
 
 
 def upload_photos(obj, filename):
-    to = obj.user.email + "/" + "photo" + "/" + filename
+    to = obj.album.user.email + "/" + "photo" + "/" + filename
     return to
 
 
