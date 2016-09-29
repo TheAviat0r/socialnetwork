@@ -81,12 +81,20 @@ class Meeting(BaseEvent):
         default=None
     )
 
+    class Meta:
+        verbose_name = u'Встреча'
+        verbose_name_plural = u'Встречи'
+
 
 class Birthday(BaseEvent):
     when = models.DateTimeField(
         u'Когда',
         default=None
     )
+
+    class Meta:
+        verbose_name = u'День рождения'
+        verbose_name_plural = u'Дни рождения'
 
 
 class Event(models.Model):
@@ -105,5 +113,5 @@ class Event(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        verbose_name = u'Лайк'
-        verbose_name_plural = u'Лайки'
+        verbose_name = u'Событие'
+        verbose_name_plural = u'События'
