@@ -2,11 +2,18 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 
 # Create your models here.
+
+class WithContentType(models.Model):
+    def get_content_type(self):
+        return ContentType.objects.get_for_model(self).id
+
+    class Meta:
+        abstract = True
+
 
 class WithComment(models.Model):
     count_comments = models.PositiveIntegerField(
@@ -57,7 +64,7 @@ def upload_photos(obj, filename):
     return to
 
 
-class Photo(models.Model, WithComment, WithLike):
+class Photo(WithContentType, WithLike, WithComment, models.Model):
     album = models.ForeignKey(Album)
 
     preview = models.BooleanField(

@@ -7,20 +7,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 # Create your models here.
-from usermedia.models import WithLike, WithComment
-
-from usermedia.models import Photo
+from usermedia.models import WithLike, WithComment, WithContentType
 
 
-class WithContentType(models.Model):
-    def get_content_type(self):
-        return ContentType.objects.get_for_model(self).id
-
-    class Meta:
-        abstract = True
-
-
-class Comment(models.Model, WithLike):
+class Comment(WithLike, models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         default=1
@@ -42,14 +32,13 @@ class Comment(models.Model, WithLike):
         auto_now=True
     )
 
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
     class Meta:
         verbose_name = u'Комментарий'
         verbose_name_plural = u'Комментарии'
-        abstract = True
-
-
-class PhotoComment(Comment):
-    photo = models.ForeignKey(Photo)
 
 
 class Like(models.Model):
@@ -58,21 +47,16 @@ class Like(models.Model):
         default=1
     )
 
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
     class Meta:
         verbose_name = u'Лайк'
         verbose_name_plural = u'Лайки'
-        abstract = True
 
 
-class PhotoLike(Like):
-    photo = models.ForeignKey(Photo)
-
-
-class CommentLike(Like):
-    comment = models.ForeignKey(Comment)
-
-
-class BaseEvent(models.Model, WithComment, WithLike, WithContentType):
+class BaseEvent(WithComment, WithLike, WithContentType, models.Model):
     class Meta:
         verbose_name = u'Событие'
         verbose_name_plural = u'События'
