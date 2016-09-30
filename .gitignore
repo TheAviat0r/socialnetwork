@@ -2,6 +2,7 @@
 *.pyc
 
 settings.py
+src/+/migrations/
 
 *.json
 
